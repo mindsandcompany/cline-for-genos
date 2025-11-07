@@ -73,8 +73,8 @@ export function validateApiConfiguration(currentMode: Mode, apiConfiguration?: A
 			case "cline":
 				break
 			case "openai":
-				if (!apiConfiguration.openAiBaseUrl || !apiConfiguration.openAiApiKey || !openAiModelId) {
-					return "You must provide a valid base URL, API key, and model ID."
+				if (!apiConfiguration.openAiBaseUrl || !apiConfiguration.openAiApiKey) {
+					return "You must provide a valid base URL and API key."
 				}
 				break
 			case "requesty":

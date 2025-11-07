@@ -1,4 +1,4 @@
-# Cline CLI
+# CLINE-for-Genos CLI
 
 ```
 /_____/\ /_/\      /_______/\/__/\ /__/\ /_____/\
@@ -13,10 +13,10 @@ Autonomous coding agent CLI - capable of creating/editing files, running command
 
 ## Installation
 
-Install Cline globally using npm:
+Install CLINE-for-Genos globally using npm:
 
 ```bash
-npm install -g cline
+npm install -g cline-for-genos
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ npm install -g cline
 cline
 ```
 
-This will start the Cline CLI interface where you can interact with the autonomous coding agent.
+This will start the CLINE-for-Genos CLI interface where you can interact with the autonomous coding agent.
 
 ## Features
 
@@ -45,7 +45,7 @@ This will start the Cline CLI interface where you can interact with the autonomo
 
 ## Configuration
 
-Cline can be configured through:
+CLINE-for-Genos can be configured through:
 
 -   Environment variables
 -   Configuration files

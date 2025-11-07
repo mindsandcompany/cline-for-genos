@@ -72,24 +72,38 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 	return (
 		<div>
 			<Tooltip>
-				<TooltipTrigger>
-					<div className="mb-2.5">
+				<TooltipTrigger style={{ width: "100%" }}>
+					<div className="mb-2.5" style={{ width: "100%" }}>
 						<div className="flex items-center gap-2 mb-1">
-							<span style={{ fontWeight: 500 }}>Base URL</span>
+							<span style={{ fontWeight: 500 }}>GenOS 서빙 API URL</span>
 							{remoteConfigSettings?.openAiBaseUrl !== undefined && (
 								<i className="codicon codicon-lock text-description text-sm" />
 							)}
 						</div>
-						<DebouncedTextField
+						<textarea
 							disabled={remoteConfigSettings?.openAiBaseUrl !== undefined}
-							initialValue={apiConfiguration?.openAiBaseUrl || ""}
-							onChange={(value) => {
+							onChange={(e) => {
+								const value = e.target.value
 								handleFieldChange("openAiBaseUrl", value)
 								debouncedRefreshOpenAiModels(value, apiConfiguration?.openAiApiKey)
 							}}
-							placeholder={"Enter base URL..."}
-							style={{ width: "100%", marginBottom: 10 }}
-							type="text"
+							placeholder={
+								"아래와 같은 서빙 API Url을 입력하세요\nhttps://genos.genon.ai:3443/api/gateway/rep/serving/558/v1"
+							}
+							style={{
+								width: "100%",
+								minHeight: "80px",
+								padding: "8px",
+								marginBottom: 10,
+								backgroundColor: "var(--vscode-input-background)",
+								color: "var(--vscode-input-foreground)",
+								border: "1px solid var(--vscode-input-border)",
+								borderRadius: "2px",
+								fontFamily: "var(--vscode-font-family)",
+								fontSize: "var(--vscode-font-size)",
+								resize: "vertical",
+							}}
+							value={apiConfiguration?.openAiBaseUrl || ""}
 						/>
 					</div>
 				</TooltipTrigger>
@@ -99,126 +113,133 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 			</Tooltip>
 
 			<ApiKeyField
+				helpText="이 키는 로컬에 저장되며 이 확장 프로그램에서 API 요청을 수행하는 데만 사용됩니다."
 				initialValue={apiConfiguration?.openAiApiKey || ""}
 				onChange={(value) => {
 					handleFieldChange("openAiApiKey", value)
 					debouncedRefreshOpenAiModels(apiConfiguration?.openAiBaseUrl, value)
 				}}
-				providerName="OpenAI Compatible"
+				providerName="GenOS 서빙"
 			/>
 
-			<DebouncedTextField
-				initialValue={selectedModelId || ""}
-				onChange={(value) =>
-					handleModeFieldChange({ plan: "planModeOpenAiModelId", act: "actModeOpenAiModelId" }, value, currentMode)
-				}
-				placeholder={"Enter Model ID..."}
-				style={{ width: "100%", marginBottom: 10 }}>
-				<span style={{ fontWeight: 500 }}>Model ID</span>
-			</DebouncedTextField>
+			<div style={{ display: "none" }}>
+				<DebouncedTextField
+					initialValue={selectedModelId || ""}
+					onChange={(value) =>
+						handleModeFieldChange({ plan: "planModeOpenAiModelId", act: "actModeOpenAiModelId" }, value, currentMode)
+					}
+					placeholder={"Enter Model ID..."}
+					style={{ width: "100%", marginBottom: 10 }}>
+					<span style={{ fontWeight: 500 }}>Model ID</span>
+				</DebouncedTextField>
+			</div>
 
-			{/* OpenAI Compatible Custom Headers */}
-			{(() => {
-				const headerEntries = Object.entries(apiConfiguration?.openAiHeaders ?? {})
+			<div style={{ display: "none" }}>
+				{/* OpenAI Compatible Custom Headers */}
+				{(() => {
+					const headerEntries = Object.entries(apiConfiguration?.openAiHeaders ?? {})
 
-				return (
-					<div style={{ marginBottom: 10 }}>
-						<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-							<Tooltip>
-								<TooltipTrigger>
-									<div className="flex items-center gap-2">
-										<span style={{ fontWeight: 500 }}>Custom Headers</span>
-										{remoteConfigSettings?.openAiHeaders !== undefined && (
-											<i className="codicon codicon-lock text-description text-sm" />
-										)}
-									</div>
-								</TooltipTrigger>
-								<TooltipContent hidden={remoteConfigSettings?.openAiHeaders === undefined}>
-									This setting is managed by your organization's remote configuration
-								</TooltipContent>
-							</Tooltip>
-							<VSCodeButton
-								disabled={remoteConfigSettings?.openAiHeaders !== undefined}
-								onClick={() => {
-									const currentHeaders = { ...(apiConfiguration?.openAiHeaders || {}) }
-									const headerCount = Object.keys(currentHeaders).length
-									const newKey = `header${headerCount + 1}`
-									currentHeaders[newKey] = ""
-									handleFieldChange("openAiHeaders", currentHeaders)
-								}}>
-								Add Header
-							</VSCodeButton>
-						</div>
+					return (
+						<div style={{ marginBottom: 10 }}>
+							<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+								<Tooltip>
+									<TooltipTrigger>
+										<div className="flex items-center gap-2">
+											<span style={{ fontWeight: 500 }}>Custom Headers</span>
+											{remoteConfigSettings?.openAiHeaders !== undefined && (
+												<i className="codicon codicon-lock text-description text-sm" />
+											)}
+										</div>
+									</TooltipTrigger>
+									<TooltipContent hidden={remoteConfigSettings?.openAiHeaders === undefined}>
+										This setting is managed by your organization's remote configuration
+									</TooltipContent>
+								</Tooltip>
+								<VSCodeButton
+									disabled={remoteConfigSettings?.openAiHeaders !== undefined}
+									onClick={() => {
+										const currentHeaders = { ...(apiConfiguration?.openAiHeaders || {}) }
+										const headerCount = Object.keys(currentHeaders).length
+										const newKey = `header${headerCount + 1}`
+										currentHeaders[newKey] = ""
+										handleFieldChange("openAiHeaders", currentHeaders)
+									}}>
+									Add Header
+								</VSCodeButton>
+							</div>
 
-						<div>
-							{headerEntries.map(([key, value], index) => (
-								<div key={index} style={{ display: "flex", gap: 5, marginTop: 5 }}>
-									<DebouncedTextField
-										disabled={remoteConfigSettings?.openAiHeaders !== undefined}
-										initialValue={key}
-										onChange={(newValue) => {
-											const currentHeaders = apiConfiguration?.openAiHeaders ?? {}
-											if (newValue && newValue !== key) {
-												const { [key]: _, ...rest } = currentHeaders
+							<div>
+								{headerEntries.map(([key, value], index) => (
+									<div key={index} style={{ display: "flex", gap: 5, marginTop: 5 }}>
+										<DebouncedTextField
+											disabled={remoteConfigSettings?.openAiHeaders !== undefined}
+											initialValue={key}
+											onChange={(newValue) => {
+												const currentHeaders = apiConfiguration?.openAiHeaders ?? {}
+												if (newValue && newValue !== key) {
+													const { [key]: _, ...rest } = currentHeaders
+													handleFieldChange("openAiHeaders", {
+														...rest,
+														[newValue]: value,
+													})
+												}
+											}}
+											placeholder="Header name"
+											style={{ width: "40%" }}
+										/>
+										<DebouncedTextField
+											disabled={remoteConfigSettings?.openAiHeaders !== undefined}
+											initialValue={value}
+											onChange={(newValue) => {
 												handleFieldChange("openAiHeaders", {
-													...rest,
-													[newValue]: value,
+													...(apiConfiguration?.openAiHeaders ?? {}),
+													[key]: newValue,
 												})
-											}
-										}}
-										placeholder="Header name"
-										style={{ width: "40%" }}
-									/>
-									<DebouncedTextField
-										disabled={remoteConfigSettings?.openAiHeaders !== undefined}
-										initialValue={value}
-										onChange={(newValue) => {
-											handleFieldChange("openAiHeaders", {
-												...(apiConfiguration?.openAiHeaders ?? {}),
-												[key]: newValue,
-											})
-										}}
-										placeholder="Header value"
-										style={{ width: "40%" }}
-									/>
-									<VSCodeButton
-										appearance="secondary"
-										disabled={remoteConfigSettings?.openAiHeaders !== undefined}
-										onClick={() => {
-											const { [key]: _, ...rest } = apiConfiguration?.openAiHeaders ?? {}
-											handleFieldChange("openAiHeaders", rest)
-										}}>
-										Remove
-									</VSCodeButton>
-								</div>
-							))}
+											}}
+											placeholder="Header value"
+											style={{ width: "40%" }}
+										/>
+										<VSCodeButton
+											appearance="secondary"
+											disabled={remoteConfigSettings?.openAiHeaders !== undefined}
+											onClick={() => {
+												const { [key]: _, ...rest } = apiConfiguration?.openAiHeaders ?? {}
+												handleFieldChange("openAiHeaders", rest)
+											}}>
+											Remove
+										</VSCodeButton>
+									</div>
+								))}
+							</div>
 						</div>
-					</div>
-				)
-			})()}
+					)
+				})()}
+			</div>
 
-			{remoteConfigSettings?.azureApiVersion !== undefined ? (
-				<Tooltip>
-					<TooltipTrigger>
-						<BaseUrlField
-							disabled={true}
-							initialValue={apiConfiguration?.azureApiVersion}
-							label="Set Azure API version"
-							onChange={(value) => handleFieldChange("azureApiVersion", value)}
-							placeholder={`Default: ${azureOpenAiDefaultApiVersion}`}
-							showLockIcon={true}
-						/>
-					</TooltipTrigger>
-					<TooltipContent>This setting is managed by your organization's remote configuration</TooltipContent>
-				</Tooltip>
-			) : (
-				<BaseUrlField
-					initialValue={apiConfiguration?.azureApiVersion}
-					label="Set Azure API version"
-					onChange={(value) => handleFieldChange("azureApiVersion", value)}
-					placeholder={`Default: ${azureOpenAiDefaultApiVersion}`}
-				/>
-			)}
+			<div style={{ display: "none" }}>
+				{remoteConfigSettings?.azureApiVersion !== undefined ? (
+					<Tooltip>
+						<TooltipTrigger>
+							<BaseUrlField
+								disabled={true}
+								initialValue={apiConfiguration?.azureApiVersion}
+								label="Set Azure API version"
+								onChange={(value) => handleFieldChange("azureApiVersion", value)}
+								placeholder={`Default: ${azureOpenAiDefaultApiVersion}`}
+								showLockIcon={true}
+							/>
+						</TooltipTrigger>
+						<TooltipContent>This setting is managed by your organization's remote configuration</TooltipContent>
+					</Tooltip>
+				) : (
+					<BaseUrlField
+						initialValue={apiConfiguration?.azureApiVersion}
+						label="Set Azure API version"
+						onChange={(value) => handleFieldChange("azureApiVersion", value)}
+						placeholder={`Default: ${azureOpenAiDefaultApiVersion}`}
+					/>
+				)}
+			</div>
 
 			<div
 				onClick={() => setModelConfigurationSelected((val) => !val)}
@@ -239,7 +260,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 						fontWeight: 700,
 						textTransform: "uppercase",
 					}}>
-					Model Configuration
+					모델 설정
 				</span>
 			</div>
 
@@ -257,7 +278,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 								currentMode,
 							)
 						}}>
-						Supports Images
+						이미지 지원
 					</VSCodeCheckbox>
 
 					<VSCodeCheckbox
@@ -273,7 +294,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 								currentMode,
 							)
 						}}>
-						Enable R1 messages format
+						R1 메시지 형식 활성화
 					</VSCodeCheckbox>
 
 					<div style={{ display: "flex", gap: 10, marginTop: "5px" }}>
@@ -293,7 +314,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 								)
 							}}
 							style={{ flex: 1 }}>
-							<span style={{ fontWeight: 500 }}>Context Window Size</span>
+							<span style={{ fontWeight: 500 }}>Context Window 크기</span>
 						</DebouncedTextField>
 
 						<DebouncedTextField
@@ -312,7 +333,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 								)
 							}}
 							style={{ flex: 1 }}>
-							<span style={{ fontWeight: 500 }}>Max Output Tokens</span>
+							<span style={{ fontWeight: 500 }}>최대 출력 Tokens</span>
 						</DebouncedTextField>
 					</div>
 
@@ -333,7 +354,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 								)
 							}}
 							style={{ flex: 1 }}>
-							<span style={{ fontWeight: 500 }}>Input Price / 1M tokens</span>
+							<span style={{ fontWeight: 500 }}>입력 가격 / 1M tokens</span>
 						</DebouncedTextField>
 
 						<DebouncedTextField
@@ -352,7 +373,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 								)
 							}}
 							style={{ flex: 1 }}>
-							<span style={{ fontWeight: 500 }}>Output Price / 1M tokens</span>
+							<span style={{ fontWeight: 500 }}>출력 가격 / 1M tokens</span>
 						</DebouncedTextField>
 					</div>
 
@@ -392,6 +413,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 					fontSize: "12px",
 					marginTop: 3,
 					color: "var(--vscode-descriptionForeground)",
+					display: "none",
 				}}>
 				<span style={{ color: "var(--vscode-errorForeground)" }}>
 					(<span style={{ fontWeight: 500 }}>Note:</span> Cline uses complex prompts and works best with Claude models.
@@ -399,7 +421,7 @@ export const OpenAICompatibleProvider = ({ showModelOptions, isPopup, currentMod
 				</span>
 			</p>
 
-			{showModelOptions && (
+			{false && showModelOptions && (
 				<ModelInfoView isPopup={isPopup} modelInfo={selectedModelInfo} selectedModelId={selectedModelId} />
 			)}
 		</div>

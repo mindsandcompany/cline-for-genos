@@ -203,15 +203,13 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 	const formatDate = useCallback((timestamp: number) => {
 		const date = new Date(timestamp)
 		return date
-			?.toLocaleString("en-US", {
+			?.toLocaleString("ko-KR", {
 				month: "long",
 				day: "numeric",
 				hour: "numeric",
 				minute: "2-digit",
 				hour12: true,
 			})
-			.replace(", ", " ")
-			.replace(" at", ",")
 			.toUpperCase()
 	}, [])
 
@@ -311,9 +309,9 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 							color: getEnvironmentColor(environment),
 							margin: 0,
 						}}>
-						History
+						기록
 					</h3>
-					<VSCodeButton onClick={() => onDone()}>Done</VSCodeButton>
+					<VSCodeButton onClick={() => onDone()}>완료</VSCodeButton>
 				</div>
 				<div style={{ padding: "5px 17px 6px 17px" }}>
 					<div className="flex flex-col gap-3">
@@ -326,7 +324,7 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 									setSortOption("mostRelevant")
 								}
 							}}
-							placeholder="Fuzzy search history..."
+							placeholder="기록 검색..."
 							style={{ width: "100%" }}
 							value={searchQuery}>
 							<div
@@ -356,30 +354,30 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 							className="flex flex-wrap"
 							onChange={(e) => setSortOption((e.target as HTMLInputElement).value as SortOption)}
 							value={sortOption}>
-							<VSCodeRadio value="newest">Newest</VSCodeRadio>
-							<VSCodeRadio value="oldest">Oldest</VSCodeRadio>
-							<VSCodeRadio value="mostExpensive">Most Expensive</VSCodeRadio>
-							<VSCodeRadio value="mostTokens">Most Tokens</VSCodeRadio>
+							<VSCodeRadio value="newest">최신순</VSCodeRadio>
+							<VSCodeRadio value="oldest">오래된 순</VSCodeRadio>
+							<VSCodeRadio value="mostExpensive">비용 높은 순</VSCodeRadio>
+							<VSCodeRadio value="mostTokens">토큰 많은 순</VSCodeRadio>
 							<VSCodeRadio disabled={!searchQuery} style={{ opacity: searchQuery ? 1 : 0.5 }} value="mostRelevant">
-								Most Relevant
+								관련성 높은 순
 							</VSCodeRadio>
 							<CustomFilterRadio
 								checked={showCurrentWorkspaceOnly}
 								icon="workspace"
-								label="Workspace"
+								label="워크스페이스"
 								onChange={() => setShowCurrentWorkspaceOnly(!showCurrentWorkspaceOnly)}
 							/>
 							<CustomFilterRadio
 								checked={showFavoritesOnly}
 								icon="star-full"
-								label="Favorites"
+								label="즐겨찾기"
 								onChange={() => setShowFavoritesOnly(!showFavoritesOnly)}
 							/>
 						</VSCodeRadioGroup>
 
 						<div className="flex justify-end gap-2.5">
-							<VSCodeButton onClick={() => handleBatchHistorySelect(true)}>Select All</VSCodeButton>
-							<VSCodeButton onClick={() => handleBatchHistorySelect(false)}>Select None</VSCodeButton>
+							<VSCodeButton onClick={() => handleBatchHistorySelect(true)}>모두 선택</VSCodeButton>
+							<VSCodeButton onClick={() => handleBatchHistorySelect(false)}>선택 해제</VSCodeButton>
 						</div>
 					</div>
 				</div>
@@ -436,7 +434,7 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 											{!(pendingFavoriteToggles[item.id] ?? item.isFavorited) && (
 												<VSCodeButton
 													appearance="icon"
-													aria-label="Delete"
+													aria-label="삭제"
 													className="delete-button"
 													onClick={(e) => {
 														e.stopPropagation()
@@ -448,7 +446,6 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 															display: "flex",
 															alignItems: "center",
 															gap: "3px",
-															fontSize: "11px",
 														}}>
 														<span className="codicon codicon-trash"></span>
 														{formatSize(item.size)}
@@ -534,7 +531,7 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 														fontWeight: 500,
 														color: "var(--vscode-descriptionForeground)",
 													}}>
-													Tokens:
+													토큰:
 												</span>
 												<span
 													style={{
@@ -648,7 +645,7 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 															fontWeight: 500,
 															color: "var(--vscode-descriptionForeground)",
 														}}>
-														API Cost:
+														API 비용:
 													</span>
 													<span
 														style={{
@@ -677,17 +674,17 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 					}}>
 					{selectedItems.length > 0 ? (
 						<DangerButton
-							aria-label="Delete selected items"
+							aria-label="선택한 항목 삭제"
 							onClick={() => {
 								handleDeleteSelectedHistoryItems(selectedItems)
 							}}
 							style={{ width: "100%" }}>
-							Delete {selectedItems.length > 1 ? selectedItems.length : ""} Selected
+							선택한 {selectedItems.length > 1 ? selectedItems.length + "개" : ""} 항목 삭제
 							{selectedItemsSize > 0 ? ` (${formatSize(selectedItemsSize)})` : ""}
 						</DangerButton>
 					) : (
 						<DangerButton
-							aria-label="Delete all history"
+							aria-label="모든 기록 삭제"
 							disabled={deleteAllDisabled || taskHistory.length === 0}
 							onClick={() => {
 								setDeleteAllDisabled(true)
@@ -697,7 +694,7 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 									.finally(() => setDeleteAllDisabled(false))
 							}}
 							style={{ width: "100%" }}>
-							Delete All History{totalTasksSize !== null ? ` (${formatSize(totalTasksSize)})` : ""}
+							모든 기록 삭제{totalTasksSize !== null ? ` (${formatSize(totalTasksSize)})` : ""}
 						</DangerButton>
 					)}
 				</div>

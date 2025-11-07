@@ -129,10 +129,10 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 
 	const providerOptions = useMemo(() => {
 		let providers = [
+			{ value: "openai", label: "GenOS 서빙" },
 			{ value: "cline", label: "Cline" },
 			{ value: "openrouter", label: "OpenRouter" },
 			{ value: "gemini", label: "Google Gemini" },
-			{ value: "openai", label: "OpenAI Compatible" },
 			{ value: "anthropic", label: "Anthropic" },
 			{ value: "bedrock", label: "Amazon Bedrock" },
 			{ value: "vscode-lm", label: "VS Code LM API" },

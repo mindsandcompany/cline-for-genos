@@ -1148,8 +1148,13 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			switch (selectedProvider) {
 				case "cline":
 					return `${selectedProvider}:${selectedModelId}`
-				case "openai":
-					return `openai-compat:${selectedModelId}`
+				case "openai": {
+					// Parse serving ID from URL if available
+					const baseUrl = apiConfiguration?.openAiBaseUrl || ""
+					const servingIdMatch = baseUrl.match(/\/serving\/(\d+)\/v1/)
+					const servingId = servingIdMatch ? servingIdMatch[1] : selectedModelId
+					return `genos-serving:${servingId}`
+				}
 				case "vscode-lm":
 					return `vscode-lm:${vsCodeLmModelSelector ? `${vsCodeLmModelSelector.vendor ?? ""}/${vsCodeLmModelSelector.family ?? ""}` : unknownModel}`
 				case "together":
@@ -1606,8 +1611,10 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						value={inputValue}
 					/>
 					{!inputValue && selectedImages.length === 0 && selectedFiles.length === 0 && (
-						<div className="text-xs absolute bottom-5 left-6.5 right-16 text-(--vscode-input-placeholderForeground)/50 whitespace-nowrap overflow-hidden text-ellipsis pointer-events-none z-1">
-							Type @ for context, / for slash commands & workflows, hold shift to drag in files/images
+						<div
+							className="absolute bottom-5 left-6.5 right-16 text-(--vscode-input-placeholderForeground)/50 pointer-events-none z-1 leading-tight"
+							style={{ fontSize: "10px" }}>
+							컨텍스트는 @, 슬래시 명령어와 워크플로우는 /, 파일/이미지 드래그는 Shift 키를 누른 채로
 						</div>
 					)}
 					{(selectedImages.length > 0 || selectedFiles.length > 0) && (

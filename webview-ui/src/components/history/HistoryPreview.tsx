@@ -26,15 +26,13 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 	const formatDate = (timestamp: number) => {
 		const date = new Date(timestamp)
 		return date
-			?.toLocaleString("en-US", {
+			?.toLocaleString("ko-KR", {
 				month: "long",
 				day: "numeric",
 				hour: "numeric",
 				minute: "2-digit",
 				hour12: true,
 			})
-			.replace(", ", " ")
-			.replace(" at", ",")
 			.toUpperCase()
 	}
 
@@ -93,7 +91,7 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 						fontSize: "0.85em",
 						textTransform: "uppercase",
 					}}>
-					Recent Tasks
+					최근 작업
 				</span>
 			</div>
 
@@ -169,7 +167,7 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 								}}>
 								<VSCodeButton
 									appearance="icon"
-									aria-label="View all history"
+									aria-label="전체 기록 보기"
 									onClick={() => showHistoryView()}
 									style={{
 										opacity: 0.9,
@@ -179,7 +177,7 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 											fontSize: "var(--vscode-font-size)",
 											color: "var(--vscode-descriptionForeground)",
 										}}>
-										View all history
+										전체 기록 보기
 									</div>
 								</VSCodeButton>
 							</div>
@@ -192,7 +190,7 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 								fontSize: "var(--vscode-font-size)",
 								padding: "10px 0",
 							}}>
-							No recent tasks
+							최근 작업 없음
 						</div>
 					)}
 				</div>

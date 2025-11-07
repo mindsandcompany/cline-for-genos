@@ -454,8 +454,8 @@ export async function readGlobalStateFromDisk(context: ExtensionContext): Promis
 		if (planModeApiProvider) {
 			apiProvider = planModeApiProvider
 		} else {
-			// New users should default to openrouter, since they've opted to use an API key instead of signing in
-			apiProvider = "openrouter"
+			// New users should default to GenOS Serving
+			apiProvider = "openai"
 		}
 
 		const mcpResponsesCollapsed = mcpResponsesCollapsedRaw ?? false

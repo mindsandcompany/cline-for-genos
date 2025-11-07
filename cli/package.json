@@ -1,5 +1,5 @@
 {
-	"name": "cline",
+	"name": "cline-for-genos",
 	"version": "1.0.3",
 	"description": "Autonomous coding agent CLI - capable of creating/editing files, running commands, using the browser, and more",
 	"main": "cline-core.js",
@@ -38,14 +38,14 @@
 		"cli"
 	],
 	"author": {
-		"name": "Cline Bot Inc."
+		"name": "CLINE-for-Genos"
 	},
 	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/cline/cline"
+		"url": "https://github.com/mindsandcompany/cline-for-genos"
 	},
-	"homepage": "https://cline.bot",
+	"homepage": "https://genon.ai/",
 	"bugs": {
 		"url": "https://github.com/cline/cline/issues"
 	},

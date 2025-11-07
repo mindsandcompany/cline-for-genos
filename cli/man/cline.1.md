@@ -1,14 +1,14 @@
 ---
-title: CLINE
+title: CLINE-for-Genos
 section: 1
 header: User Commands
-footer: Cline CLI 1.0
+footer: CLINE-for-Genos CLI 1.0
 date: January 2025
 ---
 
 # NAME
 
-cline - orchestrate and interact with Cline AI coding agents
+cline - orchestrate and interact with CLINE-for-Genos AI coding agents
 
 # SYNOPSIS
 
@@ -20,9 +20,9 @@ cline - orchestrate and interact with Cline AI coding agents
 
 Try: cat README.md | cline "Summarize this for me:"
 
-**cline** is a command-line interface for orchestrating multiple Cline AI coding agents. Cline is an autonomous AI agent who can read, write, and execute code across your projects. He operates through a client-server architecture where **Cline Core** runs as a standalone service, and the CLI acts as a scriptable interface for managing tasks, instances, and agent interactions.
+**cline** is a command-line interface for orchestrating multiple CLINE-for-Genos AI coding agents. CLINE-for-Genos is an autonomous AI agent who can read, write, and execute code across your projects. He operates through a client-server architecture where **CLINE-for-Genos Core** runs as a standalone service, and the CLI acts as a scriptable interface for managing tasks, instances, and agent interactions.
 
-The CLI is designed for both interactive use and automation, making it ideal for CI/CD pipelines, parallel task execution, and terminal-based workflows. Multiple frontends (CLI, VSCode, JetBrains) can attach to the same Cline Core instance, enabling seamless task handoff between environments.
+The CLI is designed for both interactive use and automation, making it ideal for CI/CD pipelines, parallel task execution, and terminal-based workflows. Multiple frontends (CLI, VSCode, JetBrains) can attach to the same CLINE-for-Genos Core instance, enabling seamless task handoff between environments.
 
 # MODES OF OPERATION
 
@@ -36,15 +36,15 @@ The CLI is designed for both interactive use and automation, making it ideal for
 
 # AGENT BEHAVIOR
 
-Cline operates in two primary modes:
+CLINE-for-Genos operates in two primary modes:
 
 **ACT MODE**
 
-:   Cline actively uses tools to accomplish tasks. He can read files, write code, execute commands, use a headless browser, and more. This is the default mode for task execution.
+:   CLINE-for-Genos actively uses tools to accomplish tasks. He can read files, write code, execute commands, use a headless browser, and more. This is the default mode for task execution.
 
 **PLAN MODE**
 
-:   Cline gathers information and creates a detailed plan before implementation. He explores the codebase, asks clarifying questions, and presents a strategy for user approval before switching to ACT MODE.
+:   CLINE-for-Genos gathers information and creates a detailed plan before implementation. He explores the codebase, asks clarifying questions, and presents a strategy for user approval before switching to ACT MODE.
 
 # INSTANT TASK OPTIONS
 
@@ -52,7 +52,7 @@ When using the instant task syntax **cline "prompt"** the following options are 
 
 **-o**, **\--oneshot**
 
-:   Full autonomous mode. Cline completes the task and stops following after completion. Example: cline -o "what's 6 + 8?"
+:   Full autonomous mode. CLINE-for-Genos completes the task and stops following after completion. Example: cline -o "what's 6 + 8?"
 
 **-s**, **\--setting** *setting* *value*
 

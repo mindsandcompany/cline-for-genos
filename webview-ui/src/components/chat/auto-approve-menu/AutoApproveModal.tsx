@@ -90,12 +90,12 @@ const AutoApproveModal: React.FC<AutoApproveModalProps> = ({ isVisible, setIsVis
 					maxHeight: "60vh",
 				}}>
 				<div className="mb-2.5 text-muted-foreground text-xs cursor-pointer" onClick={() => setIsVisible(false)}>
-					Let Cline take these actions without asking for approval.{" "}
+					승인을 요청하지 않고 Cline이 이러한 작업을 수행하도록 허용합니다.{" "}
 					<span
 						className="underline cursor-pointer hover:text-foreground"
 						onClick={handleNotificationsLinkClick}
 						style={{ textDecoration: "underline" }}>
-						Configure notification settings
+						알림 설정 구성
 					</span>
 				</div>
 
